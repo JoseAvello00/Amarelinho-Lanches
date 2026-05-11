@@ -1,176 +1,1247 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio - Amarelinho Hamburgueria</title>
-    <style>
-        /* Estilos base */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #fafafa;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amarelinho Hamburgueria</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFCC00;
+    --black: #0e0e0e;
+    --dark: #1a1a1a;
+    --mid: #2a2a2a;
+    --white: #f5f5f0;
+    --gray: #888;
+    --border: #2e2e2e;
+  }
 
-        /* O Amarelinho no topo */
-        header {
-            background-color: #FFCC00;
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100; /* Garante que fique por cima de tudo */
-        }
-        h1 { margin: 0; color: #b30000; font-size: 1.5rem; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Estrutura principal dividida em 2 colunas */
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
-            gap: 30px;
-        }
+  html { scroll-behavior: smooth; }
 
-        /* Barra Lateral (As abas) */
-        .sidebar {
-            width: 250px;
-            /* O truque da barra fixa: */
-            position: sticky;
-            top: 80px; 
-            height: fit-content;
-        }
-        .sidebar h3 {
-            margin-top: 0;
-            color: #b30000;
-            border-bottom: 2px solid #FFCC00;
-            padding-bottom: 10px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar li {
-            margin-bottom: 10px;
-        }
-        .sidebar a {
-            text-decoration: none;
-            color: #555;
-            font-weight: bold;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .sidebar a:hover, .sidebar a.ativo {
-            background-color: #FFCC00;
-            color: #b30000;
-        }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
 
-        /* Área do Cardápio */
-        .cardapio-content {
-            flex: 1; /* Ocupa o resto do espaço */
-        }
-        .categoria {
-            margin-bottom: 50px;
-            scroll-margin-top: 100px; /* Para não ficar escondido atrás do header ao clicar no link */
-        }
-        .categoria h2 {
-            color: #333;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 3px; }
 
-        /* Estilo básico de um lanche */
-        .item-lanche {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
-            border-left: 5px solid #FFCC00;
-        }
-        .item-lanche h4 { margin: 0 0 10px 0; font-size: 1.2rem; color: #b30000; }
-        .item-lanche p { margin: 0; color: #666; font-size: 0.9rem; }
-        .preco { font-weight: bold; color: #222; margin-top: 10px; display: block; font-size: 1.1rem; }
+  /* ══════════════════════════════
+     ANÚNCIO TOPO
+  ══════════════════════════════ */
+  .topbar {
+    background: var(--yellow);
+    color: var(--black);
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .topbar-inner {
+    display: inline-block;
+    animation: marquee 22s linear infinite;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(60vw); }
+    100% { transform: translateX(-100%); }
+  }
 
-        /* Responsivo para Celular (As abas viram um menu rolável no topo) */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                position: static;
-            }
-            .sidebar ul {
-                display: flex;
-                overflow-x: auto; /* Permite rolar para o lado no celular */
-                gap: 10px;
-                padding-bottom: 10px;
-            }
-            .sidebar a {
-                white-space: nowrap;
-            }
-        }
-    </style>
+  /* ══════════════════════════════
+     NAVBAR
+  ══════════════════════════════ */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: var(--black);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 64px;
+  }
+
+  /* LOGO */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--yellow);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .logo-icon svg { width: 32px; height: 32px; }
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .logo-text span { color: var(--yellow); }
+  .logo-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gray);
+    line-height: 1;
+  }
+
+  /* TABS NAV */
+  .nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    height: 100%;
+  }
+  .nav-tabs a {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 18px;
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .nav-tabs a:hover,
+  .nav-tabs a.active {
+    color: var(--yellow);
+    border-bottom-color: var(--yellow);
+  }
+
+  /* HAMBURGER MOBILE */
+  .burger {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  /* ══════════════════════════════
+     PAGES (TAB SYSTEM)
+  ══════════════════════════════ */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ══════════════════════════════
+     HERO
+  ══════════════════════════════ */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 32px;
+  }
+
+  /* Grade decorativa de fundo */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.35;
+  }
+  /* Brilho amarelo canto inferior direito */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -120px;
+    right: -120px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,204,0,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .hero h1 em {
+    color: var(--yellow);
+    font-style: normal;
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.15rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+    margin-bottom: 40px;
+    max-width: 420px;
+    line-height: 1.5;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255,204,0,0.35);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 15px 36px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* Faixa de stats */
+  .hero-stats {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+    padding-top: 40px;
+  }
+  .stat {
+    flex: 1;
+    padding-right: 40px;
+  }
+  .stat + .stat {
+    padding-left: 40px;
+    border-left: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--yellow);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Imagem hero decorativa */
+  .hero-visual {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    opacity: 0.08;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(10rem, 20vw, 22rem);
+    color: var(--yellow);
+    user-select: none;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  /* ══════════════════════════════
+     SEÇÃO SOBRE / DESTAQUE
+  ══════════════════════════════ */
+  .section {
+    padding: 80px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .section-title em { color: var(--yellow); font-style: normal; }
+
+  /* CARDS DESTAQUE */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border: 1px solid var(--border);
+    margin-top: 50px;
+  }
+  .card-feat {
+    background: var(--dark);
+    padding: 36px 28px;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .card-feat:last-child { border-right: none; }
+  .card-feat:hover { background: var(--mid); }
+  .card-feat-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--yellow);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+  }
+  .card-feat h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card-feat p {
+    font-size: 0.88rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ══════════════════════════════
+     CARDÁPIO
+  ══════════════════════════════ */
+  .menu-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 32px;
+  }
+
+  .menu-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  /* Filtros de categoria */
+  .cat-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .cat-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--gray);
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .cat-btn:hover,
+  .cat-btn.active {
+    background: var(--yellow);
+    color: var(--black);
+    border-color: var(--yellow);
+  }
+
+  /* Grid de itens */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .menu-item {
+    background: var(--dark);
+    padding: 28px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .menu-item:hover { background: var(--mid); }
+  .menu-item.hidden { display: none; }
+
+  .item-info { flex: 1; }
+  .item-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+  .item-desc {
+    font-size: 0.82rem;
+    color: var(--gray);
+    line-height: 1.55;
+  }
+  .item-tag {
+    display: inline-block;
+    background: rgba(255,204,0,0.12);
+    color: var(--yellow);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-top: 10px;
+  }
+  .item-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--yellow);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Categorias dentro do cardápio */
+  .menu-cat-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    padding: 40px 0 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .menu-cat-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .cat-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--yellow);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════
+     SOBRE
+  ══════════════════════════════ */
+  .sobre-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 32px;
+  }
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 50px;
+  }
+  .sobre-text p {
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+  .sobre-visual {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 50px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .sobre-visual::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--yellow);
+  }
+  .sobre-logo-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .sobre-logo-big span { color: var(--yellow); }
+  .sobre-logo-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .sobre-burger-icon {
+    font-size: 4rem;
+    margin: 24px 0;
+    filter: grayscale(0.2);
+  }
+
+  /* ══════════════════════════════
+     CONTATO
+  ══════════════════════════════ */
+  .contato-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 32px;
+  }
+  .contato-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 50px;
+  }
+  .contact-block {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px 28px;
+    transition: border-color 0.2s;
+  }
+  .contact-block:hover { border-color: var(--yellow); }
+  .contact-block-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,204,0,0.1);
+    border: 1px solid rgba(255,204,0,0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  .contact-block h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+  .contact-block p {
+    font-size: 1rem;
+    color: var(--white);
+    line-height: 1.5;
+  }
+  .contact-block a {
+    color: var(--yellow);
+    text-decoration: none;
+  }
+  .horario-table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .horario-table td {
+    padding: 5px 0;
+    color: var(--gray);
+  }
+  .horario-table td:last-child { color: var(--white); text-align: right; }
+
+  /* ══════════════════════════════
+     FOOTER
+  ══════════════════════════════ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 60px;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .footer-logo span { color: var(--yellow); }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+  .footer-social {
+    display: flex;
+    gap: 12px;
+  }
+  .soc-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--gray);
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .soc-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* ══════════════════════════════
+     MOBILE NAV DRAWER
+  ══════════════════════════════ */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 998;
+    flex-direction: column;
+    padding: 100px 32px 40px;
+    gap: 8px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--white);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .mobile-nav a:hover { color: var(--yellow); }
+
+  /* ══════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════ */
+  @media (max-width: 900px) {
+    .nav-tabs { display: none; }
+    .burger { display: flex; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .card-feat { border-right: none; border-bottom: 1px solid var(--border); }
+    .sobre-grid,
+    .contato-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 24px; }
+    .stat + .stat { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 24px; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-header { flex-direction: column; align-items: flex-start; }
+    nav { padding: 0 20px; }
+    .hero { padding: 80px 20px 60px; }
+    .section, .menu-page, .sobre-page, .contato-page { padding: 40px 20px; }
+  }
+
+  /* Animações de entrada */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .page.active > * {
+    animation: fadeUp 0.4s ease both;
+  }
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>Amarelinho</h1>
-    </header>
+<!-- ANÚNCIO TOPO -->
+<div class="topbar">
+  <span class="topbar-inner">
+    🍔 Amarelinho Hamburgueria &nbsp;•&nbsp; Feito com amor na sua cidade &nbsp;•&nbsp; Aberto todos os dias &nbsp;•&nbsp; Combos exclusivos &nbsp;•&nbsp; Peça agora! &nbsp;•&nbsp; 🍟 Batata crocante &nbsp;•&nbsp; 🥤 Bebidas geladas &nbsp;•&nbsp; X-Bacon · X-Salada · Combo Casal &nbsp;•&nbsp;
+  </span>
+</div>
 
-    <div class="container">
-        <aside class="sidebar">
-            <h3>Menu</h3>
-            <ul>
-                <li><a href="#lanches" class="ativo">🍔 Lanches</a></li>
-                <li><a href="#combos">🍟 Combos</a></li>
-                <li><a href="#bebidas">🥤 Bebidas</a></li>
-            </ul>
-        </aside>
+<!-- NAVBAR -->
+<nav>
+  <!-- LOGO -->
+  <a class="logo" onclick="showPage('inicio')">
+    <div class="logo-icon">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Pão de cima -->
+        <ellipse cx="16" cy="9" rx="13" ry="6" fill="#1a1a1a"/>
+        <!-- Sementes -->
+        <ellipse cx="12" cy="7" rx="1.5" ry="1" fill="#0e0e0e"/>
+        <ellipse cx="16" cy="6" rx="1.5" ry="1" fill="#0e0e0e"/>
+        <ellipse cx="20" cy="7.5" rx="1.5" ry="1" fill="#0e0e0e"/>
+        <!-- Queijo -->
+        <rect x="4" y="13" width="24" height="3" rx="1" fill="#e8b800"/>
+        <!-- Carne -->
+        <rect x="3" y="17" width="26" height="4" rx="2" fill="#3a2010"/>
+        <!-- Alface -->
+        <rect x="3" y="22" width="26" height="2" rx="1" fill="#1a1a1a"/>
+        <!-- Pão de baixo -->
+        <ellipse cx="16" cy="25" rx="13" ry="4" fill="#1a1a1a"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">AMAR<span>E</span>LINHO</div>
+      <div class="logo-sub">Hamburgueria</div>
+    </div>
+  </a>
 
-        <main class="cardapio-content">
-            
-            <section id="lanches" class="categoria">
-                <h2>Lanches</h2>
-                <div class="item-lanche">
-                    <h4>X-Bacon Amarelinho</h4>
-                    <p>Pão brioche, blend de 160g, muito bacon crocante, queijo cheddar derretido e maionese da casa.</p>
-                    <span class="preco">R$ 28,00</span>
-                </div>
-                <div class="item-lanche">
-                    <h4>X-Salada Tradicional</h4>
-                    <p>Pão de gergelim, blend de 160g, queijo prato, alface americana, tomate e maionese.</p>
-                    <span class="preco">R$ 22,00</span>
-                </div>
-            </section>
+  <!-- TABS -->
+  <ul class="nav-tabs">
+    <li><a onclick="showPage('inicio')" class="active" id="tab-inicio">Início</a></li>
+    <li><a onclick="showPage('cardapio')" id="tab-cardapio">Cardápio</a></li>
+    <li><a onclick="showPage('sobre')" id="tab-sobre">Sobre</a></li>
+    <li><a onclick="showPage('contato')" id="tab-contato">Contato</a></li>
+  </ul>
 
-            <section id="combos" class="categoria">
-                <h2>Combos</h2>
-                <div class="item-lanche">
-                    <h4>Combo Casal Fome</h4>
-                    <p>2 X-Bacon Amarelinho + Porção de Batata Grande com Cheddar e Bacon + 2 Refris lata.</p>
-                    <span class="preco">R$ 75,00</span>
-                </div>
-            </section>
+  <!-- BURGER MOBILE -->
+  <button class="burger" id="burgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-            <section id="bebidas" class="categoria">
-                <h2>Bebidas</h2>
-                <div class="item-lanche">
-                    <h4>Refrigerante Lata 350ml</h4>
-                    <p>Coca-Cola, Guaraná, Fanta.</p>
-                    <span class="preco">R$ 6,00</span>
-                </div>
-            </section>
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a onclick="showPage('inicio'); toggleMobileNav()">Início</a>
+  <a onclick="showPage('cardapio'); toggleMobileNav()">Cardápio</a>
+  <a onclick="showPage('sobre'); toggleMobileNav()">Sobre</a>
+  <a onclick="showPage('contato'); toggleMobileNav()">Contato</a>
+</div>
 
-        </main>
+<!-- ════════════════════════════════════════
+     PAGE: INÍCIO
+════════════════════════════════════════ -->
+<div class="page active" id="page-inicio">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-visual">🍔</div>
+    <div style="max-width:1200px; margin:0 auto; width:100%;">
+      <div class="hero-content">
+        <div class="hero-badge">🔥 Hambúrguer artesanal de verdade</div>
+        <h1>
+          A MELHOR
+          <em>BURGER</em>
+          DA CIDADE
+        </h1>
+        <p class="hero-sub">
+          Ingredientes frescos, blend artesanal e aquele sabor que você não esquece.
+          Bem-vindo ao <strong>Amarelinho</strong>.
+        </p>
+        <div class="hero-actions">
+          <a class="btn-primary" onclick="showPage('cardapio')">Ver Cardápio</a>
+          <a class="btn-outline" onclick="showPage('contato')">Onde Estamos</a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">+5K</div>
+          <div class="stat-label">Clientes satisfeitos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Opções no cardápio</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Feito na hora</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESTAQUES -->
+  <div class="section">
+    <div class="section-label">Por que o Amarelinho?</div>
+    <div class="section-title">O QUE NOS FAZ <em>DIFERENTES</em></div>
+    <div class="cards-grid">
+      <div class="card-feat">
+        <div class="card-feat-icon">🔥</div>
+        <h3>Blend Artesanal</h3>
+        <p>Nossa carne é preparada diariamente, com corte especial e blend exclusivo da casa. Cada lanche é único.</p>
+      </div>
+      <div class="card-feat">
+        <div class="card-feat-icon">⚡</div>
+        <h3>Feito na Hora</h3>
+        <p>Sem pré-preparo. Seu pedido sai fresquinho, do pão ao recheio, com o cuidado que você merece.</p>
+      </div>
+      <div class="card-feat">
+        <div class="card-feat-icon">🏆</div>
+        <h3>Preço Justo</h3>
+        <p>Qualidade de hamburguer artesanal sem pesar no bolso. Combos especiais pra família toda.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA CARDÁPIO -->
+  <div style="background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 70px 32px; text-align: center; position: relative; overflow: hidden;">
+    <div style="position:absolute;inset:0;background: radial-gradient(ellipse at 50% 50%, rgba(255,204,0,0.06) 0%, transparent 70%);"></div>
+    <div style="position:relative; z-index:1;">
+      <div class="section-label" style="margin-bottom:12px;">cardápio completo</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); margin-bottom:28px;">EXPLORE NOSSO <em style="color:var(--yellow); font-style:normal;">MENU</em></h2>
+      <p style="color:var(--gray); margin-bottom:36px; max-width:400px; margin-left:auto; margin-right:auto; font-size:0.95rem; line-height:1.6;">Lanches, combos, bebidas e muito mais. Tem pra todos os gostos!</p>
+      <a class="btn-primary" onclick="showPage('cardapio')">Abrir Cardápio →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: CARDÁPIO
+════════════════════════════════════════ -->
+<div class="page" id="page-cardapio">
+  <div class="menu-page">
+
+    <div class="menu-header">
+      <div>
+        <div class="section-label">o que temos</div>
+        <h2 class="section-title" style="margin-bottom:0;">NOSSO <em>CARDÁPIO</em></h2>
+      </div>
+      <div class="cat-filters">
+        <button class="cat-btn active" onclick="filterMenu('all', this)">Tudo</button>
+        <button class="cat-btn" onclick="filterMenu('lanche', this)">🍔 Lanches</button>
+        <button class="cat-btn" onclick="filterMenu('combo', this)">🍟 Combos</button>
+        <button class="cat-btn" onclick="filterMenu('bebida', this)">🥤 Bebidas</button>
+        <button class="cat-btn" onclick="filterMenu('porcao', this)">🧀 Porções</button>
+      </div>
     </div>
 
+    <!-- LANCHES -->
+    <div class="menu-cat-title" data-cat="lanche">
+      <span class="cat-dot"></span> Lanches
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">X-Bacon Amarelinho</div>
+          <div class="item-desc">Pão brioche, blend 160g, bacon crocante, cheddar derretido e maionese da casa.</div>
+          <span class="item-tag">⭐ Mais Pedido</span>
+        </div>
+        <div class="item-price">R$28</div>
+      </div>
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">X-Salada Tradicional</div>
+          <div class="item-desc">Pão de gergelim, blend 160g, queijo prato, alface, tomate e maionese.</div>
+        </div>
+        <div class="item-price">R$22</div>
+      </div>
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">X-Tudo Amarelinho</div>
+          <div class="item-desc">Blend 200g, bacon, cheddar, presunto, ovo, alface, tomate e molho especial.</div>
+          <span class="item-tag">🔥 Destaque</span>
+        </div>
+        <div class="item-price">R$36</div>
+      </div>
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">Smash Burger</div>
+          <div class="item-desc">Dois blends de 80g prensados, queijo americano, picles e molho smash da casa.</div>
+        </div>
+        <div class="item-price">R$32</div>
+      </div>
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">Frango Crocante</div>
+          <div class="item-desc">Filé de frango empanado crocante, alface americana, tomate e maionese de alho.</div>
+        </div>
+        <div class="item-price">R$25</div>
+      </div>
+      <div class="menu-item" data-cat="lanche">
+        <div class="item-info">
+          <div class="item-name">Veggie Burger</div>
+          <div class="item-desc">Hambúrguer de grão-de-bico, cream cheese, rúcula, tomate seco e pesto.</div>
+          <span class="item-tag">🌱 Vegetariano</span>
+        </div>
+        <div class="item-price">R$26</div>
+      </div>
+    </div>
+
+    <!-- COMBOS -->
+    <div class="menu-cat-title" data-cat="combo">
+      <span class="cat-dot"></span> Combos
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item" data-cat="combo">
+        <div class="item-info">
+          <div class="item-name">Combo Individual</div>
+          <div class="item-desc">Qualquer lanche simples + batata frita média + refrigerante lata.</div>
+        </div>
+        <div class="item-price">R$38</div>
+      </div>
+      <div class="menu-item" data-cat="combo">
+        <div class="item-info">
+          <div class="item-name">Combo Casal Fome</div>
+          <div class="item-desc">2× X-Bacon Amarelinho + batata grande com cheddar e bacon + 2 refris lata.</div>
+          <span class="item-tag">💛 Favorito</span>
+        </div>
+        <div class="item-price">R$75</div>
+      </div>
+      <div class="menu-item" data-cat="combo">
+        <div class="item-info">
+          <div class="item-name">Combo Família</div>
+          <div class="item-desc">4 lanches à escolha + batata gigante + 4 refris lata ou suco.</div>
+        </div>
+        <div class="item-price">R$145</div>
+      </div>
+      <div class="menu-item" data-cat="combo">
+        <div class="item-info">
+          <div class="item-name">Combo Smash Duplo</div>
+          <div class="item-desc">2× Smash Burger + batata frita + milkshake baunilha 400ml.</div>
+          <span class="item-tag">🔥 Destaque</span>
+        </div>
+        <div class="item-price">R$68</div>
+      </div>
+    </div>
+
+    <!-- BEBIDAS -->
+    <div class="menu-cat-title" data-cat="bebida">
+      <span class="cat-dot"></span> Bebidas
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item" data-cat="bebida">
+        <div class="item-info">
+          <div class="item-name">Refrigerante Lata 350ml</div>
+          <div class="item-desc">Coca-Cola, Guaraná Antarctica, Fanta Laranja, Sprite.</div>
+        </div>
+        <div class="item-price">R$6</div>
+      </div>
+      <div class="menu-item" data-cat="bebida">
+        <div class="item-info">
+          <div class="item-name">Milkshake 400ml</div>
+          <div class="item-desc">Chocolate, baunilha, morango ou doce de leite. Cremoso e gelado.</div>
+          <span class="item-tag">⭐ Mais Pedido</span>
+        </div>
+        <div class="item-price">R$18</div>
+      </div>
+      <div class="menu-item" data-cat="bebida">
+        <div class="item-info">
+          <div class="item-name">Suco Natural 400ml</div>
+          <div class="item-desc">Laranja, limão, abacaxi, maracujá ou caju. Sem conservantes.</div>
+        </div>
+        <div class="item-price">R$12</div>
+      </div>
+      <div class="menu-item" data-cat="bebida">
+        <div class="item-info">
+          <div class="item-name">Água Mineral 500ml</div>
+          <div class="item-desc">Com ou sem gás.</div>
+        </div>
+        <div class="item-price">R$4</div>
+      </div>
+    </div>
+
+    <!-- PORÇÕES -->
+    <div class="menu-cat-title" data-cat="porcao">
+      <span class="cat-dot"></span> Porções
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item" data-cat="porcao">
+        <div class="item-info">
+          <div class="item-name">Batata Frita Média</div>
+          <div class="item-desc">Batatas palito crocantes, temperadas com sal e ervas.</div>
+        </div>
+        <div class="item-price">R$14</div>
+      </div>
+      <div class="menu-item" data-cat="porcao">
+        <div class="item-info">
+          <div class="item-name">Batata com Cheddar e Bacon</div>
+          <div class="item-desc">Porção grande de batata coberta com cheddar cremoso e bacon crocante.</div>
+          <span class="item-tag">🔥 Destaque</span>
+        </div>
+        <div class="item-price">R$26</div>
+      </div>
+      <div class="menu-item" data-cat="porcao">
+        <div class="item-info">
+          <div class="item-name">Onion Rings</div>
+          <div class="item-desc">Anéis de cebola empanados e fritos, servidos com molho ranch.</div>
+        </div>
+        <div class="item-price">R$20</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: SOBRE
+════════════════════════════════════════ -->
+<div class="page" id="page-sobre">
+  <div class="sobre-page">
+    <div class="section-label">nossa história</div>
+    <div class="section-title">QUEM É O <em>AMARELINHO?</em></div>
+
+    <div class="sobre-grid">
+      <div class="sobre-text">
+        <p>
+          O <strong>Amarelinho Hamburgueria</strong> nasceu da paixão por lanches de verdade — aqueles feitos com capricho, ingredientes frescos e aquele toque especial que só a receita da casa tem.
+        </p>
+        <p>
+          Nossa identidade é simples: <strong>preto, amarelo e muita personalidade</strong>. O amarelo que dá nome e vida ao espaço, o preto que traz atitude, e o branco que representa o padrão de limpeza e qualidade que você merece encontrar.
+        </p>
+        <p>
+          Cada detalhe do nosso espaço foi pensado pra você se sentir em casa — seja no salão interno ou na área externa iluminada com aquelas luzes que deixam a noite mais gostosa.
+        </p>
+        <p>
+          Do balcão amarelo à arte na parede, tudo aqui tem história. E a melhor parte ainda está por vir — no próximo pedido que você fizer.
+        </p>
+        <a class="btn-primary" onclick="showPage('cardapio')" style="margin-top:10px; display:inline-block;">Ver Cardápio</a>
+      </div>
+
+      <div class="sobre-visual">
+        <div class="sobre-burger-icon">🍔</div>
+        <div class="sobre-logo-big">AMAR<span>E</span>LINHO</div>
+        <div class="sobre-logo-sub">Hamburgueria · Sua cidade</div>
+        <div style="margin-top:28px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--yellow);">2020</div>
+            <div style="font-size:0.72rem; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase;">Fundação</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--yellow);">+5K</div>
+            <div style="font-size:0.72rem; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase;">Clientes</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--yellow);">4.9★</div>
+            <div style="font-size:0.72rem; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase;">Avaliação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: CONTATO
+════════════════════════════════════════ -->
+<div class="page" id="page-contato">
+  <div class="contato-page">
+    <div class="section-label">fale com a gente</div>
+    <div class="section-title">ONDE <em>ESTAMOS</em></div>
+
+    <div class="contato-grid">
+      <div class="contact-block">
+        <div class="contact-block-icon">📍</div>
+        <h4>Endereço</h4>
+        <p>Rua do Amarelinho, 100<br>Centro – Sua Cidade, MG</p>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block-icon">📞</div>
+        <h4>Telefone / WhatsApp</h4>
+        <p><a href="tel:+5538999999999">(38) 99999-9999</a></p>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block-icon">🕐</div>
+        <h4>Horário de Funcionamento</h4>
+        <table class="horario-table">
+          <tr><td>Segunda – Sexta</td><td>18h às 23h</td></tr>
+          <tr><td>Sábado</td><td>12h às 00h</td></tr>
+          <tr><td>Domingo</td><td>12h às 22h</td></tr>
+        </table>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block-icon">📱</div>
+        <h4>Redes Sociais</h4>
+        <p>
+          <a href="#">@amarelinho_hamburgueria</a><br>
+          <span style="color:var(--gray); font-size:0.85rem;">Instagram · TikTok · Facebook</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA WhatsApp -->
+    <div style="margin-top:40px; background:var(--dark); border:1px solid var(--border); border-radius:4px; padding:36px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px;">
+      <div>
+        <div class="section-label" style="margin-bottom:8px;">Peça pelo WhatsApp</div>
+        <p style="color:var(--gray); font-size:0.92rem;">Manda mensagem pra gente e faça seu pedido rapidinho!</p>
+      </div>
+      <a href="https://wa.me/5538999999999" target="_blank" class="btn-primary">💬 Chamar no WhatsApp</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">AMAR<span>E</span>LINHO</div>
+    <div class="footer-copy" style="margin-top:4px;">© 2026 Amarelinho Hamburgueria. Todos os direitos reservados.</div>
+  </div>
+  <div class="footer-social">
+    <a class="soc-btn" href="#" title="Instagram">📷</a>
+    <a class="soc-btn" href="#" title="WhatsApp">💬</a>
+    <a class="soc-btn" href="#" title="TikTok">🎵</a>
+  </div>
+</footer>
+
+<script>
+  function showPage(id) {
+    // Esconde todas as páginas
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Remove active de todas as tabs
+    document.querySelectorAll('.nav-tabs a').forEach(a => a.classList.remove('active'));
+    // Ativa a página
+    document.getElementById('page-' + id).classList.add('active');
+    // Ativa a tab correta
+    const tab = document.getElementById('tab-' + id);
+    if (tab) tab.classList.add('active');
+    // Scroll pro topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleMobileNav() {
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('open');
+  }
+
+  // Filtro do cardápio
+  function filterMenu(cat, btn) {
+    // Atualiza botão ativo
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const items = document.querySelectorAll('.menu-item');
+    const catTitles = document.querySelectorAll('.menu-cat-title');
+
+    items.forEach(item => {
+      if (cat === 'all' || item.dataset.cat === cat) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    // Esconde títulos sem itens visíveis
+    catTitles.forEach(title => {
+      const titleCat = title.dataset.cat;
+      if (cat === 'all' || titleCat === cat) {
+        title.style.display = '';
+        // Encontra o grid seguinte e mostra
+        let next = title.nextElementSibling;
+        if (next && next.classList.contains('menu-grid')) {
+          next.style.display = '';
+        }
+      } else {
+        title.style.display = 'none';
+        let next = title.nextElementSibling;
+        if (next && next.classList.contains('menu-grid')) {
+          next.style.display = 'none';
+        }
+      }
+    });
+  }
+</script>
 </body>
 </html>
-
