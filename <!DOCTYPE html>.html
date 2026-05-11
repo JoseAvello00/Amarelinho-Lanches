@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - Amarelinho Hamburgueria</title>
+    <style>
+        /* Estilos base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        /* O Amarelinho no topo */
+        header {
+            background-color: #FFCC00;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100; /* Garante que fique por cima de tudo */
+        }
+        h1 { margin: 0; color: #b30000; font-size: 1.5rem; }
+
+        /* Estrutura principal dividida em 2 colunas */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+            gap: 30px;
+        }
+
+        /* Barra Lateral (As abas) */
+        .sidebar {
+            width: 250px;
+            /* O truque da barra fixa: */
+            position: sticky;
+            top: 80px; 
+            height: fit-content;
+        }
+        .sidebar h3 {
+            margin-top: 0;
+            color: #b30000;
+            border-bottom: 2px solid #FFCC00;
+            padding-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.ativo {
+            background-color: #FFCC00;
+            color: #b30000;
+        }
+
+        /* Área do Cardápio */
+        .cardapio-content {
+            flex: 1; /* Ocupa o resto do espaço */
+        }
+        .categoria {
+            margin-bottom: 50px;
+            scroll-margin-top: 100px; /* Para não ficar escondido atrás do header ao clicar no link */
+        }
+        .categoria h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo básico de um lanche */
+        .item-lanche {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            border-left: 5px solid #FFCC00;
+        }
+        .item-lanche h4 { margin: 0 0 10px 0; font-size: 1.2rem; color: #b30000; }
+        .item-lanche p { margin: 0; color: #666; font-size: 0.9rem; }
+        .preco { font-weight: bold; color: #222; margin-top: 10px; display: block; font-size: 1.1rem; }
+
+        /* Responsivo para Celular (As abas viram um menu rolável no topo) */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            .sidebar ul {
+                display: flex;
+                overflow-x: auto; /* Permite rolar para o lado no celular */
+                gap: 10px;
+                padding-bottom: 10px;
+            }
+            .sidebar a {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Amarelinho</h1>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Menu</h3>
+            <ul>
+                <li><a href="#lanches" class="ativo">🍔 Lanches</a></li>
+                <li><a href="#combos">🍟 Combos</a></li>
+                <li><a href="#bebidas">🥤 Bebidas</a></li>
+            </ul>
+        </aside>
+
+        <main class="cardapio-content">
+            
+            <section id="lanches" class="categoria">
+                <h2>Lanches</h2>
+                <div class="item-lanche">
+                    <h4>X-Bacon Amarelinho</h4>
+                    <p>Pão brioche, blend de 160g, muito bacon crocante, queijo cheddar derretido e maionese da casa.</p>
+                    <span class="preco">R$ 28,00</span>
+                </div>
+                <div class="item-lanche">
+                    <h4>X-Salada Tradicional</h4>
+                    <p>Pão de gergelim, blend de 160g, queijo prato, alface americana, tomate e maionese.</p>
+                    <span class="preco">R$ 22,00</span>
+                </div>
+            </section>
+
+            <section id="combos" class="categoria">
+                <h2>Combos</h2>
+                <div class="item-lanche">
+                    <h4>Combo Casal Fome</h4>
+                    <p>2 X-Bacon Amarelinho + Porção de Batata Grande com Cheddar e Bacon + 2 Refris lata.</p>
+                    <span class="preco">R$ 75,00</span>
+                </div>
+            </section>
+
+            <section id="bebidas" class="categoria">
+                <h2>Bebidas</h2>
+                <div class="item-lanche">
+                    <h4>Refrigerante Lata 350ml</h4>
+                    <p>Coca-Cola, Guaraná, Fanta.</p>
+                    <span class="preco">R$ 6,00</span>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>
+
